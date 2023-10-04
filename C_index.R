@@ -219,6 +219,15 @@ archivos <- list.files(name_dir)
 archivos_con_ETCCDI <- archivos[grep("ETCCDI", archivos)]
 archivos_con_ETCCDI <-  archivos_con_ETCCDI[c(1,6:31)]
 
+# Años a trabajar:
+year <- t_min:t_max
+year
+
+# Determinar periodo, en el caso del historico puedes tomar todo, pero para las proyecciones
+# Lo ideal seria dividir por periodos como 2030:2050 y 2051:2065
+# En este caso seleccionare todo el periodo
+period <- which(year>=t_min & year<=t_max)
+
 ##########Bucle 
 
 funciones <- c("altcdd","csdi","cwd","fd","gsl","id","prcptot","r10mm","r1mm","r20mm","r95p","r99p","rx1day","rx5day","sdii","su","tn10p","tn90p","tr","tx10p","tx90p","wsdi")
@@ -232,7 +241,7 @@ for (i in 1:length(funciones)){
     
     data2 <- brick(paste0(name_dir,"/",data))
     
-    rs <- calc(data2,sum)
+    rs <- calc(data2[[c(period)]],sum)
     
     u_f <- disaggregate(rs,fact= 10,method="bilinear")
     
